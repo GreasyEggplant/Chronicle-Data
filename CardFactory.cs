@@ -1,5 +1,4 @@
-﻿using System;
-using com.greasyeggplant.chronicle.data.csvData;
+﻿using com.greasyeggplant.chronicle.data.csvData;
 using com.greasyeggplant.chronicle.data.entities.enums;
 
 namespace com.greasyeggplant.chronicle.data.entities
