@@ -31,6 +31,6 @@ namespace com.greasyeggplant.chronicle.data.entities
         Ally = 20,
         UnknownType21 = 21,
         Vampyre = 22,
-        UnknownType23 = 23
+        Action = 23
     }
 }
