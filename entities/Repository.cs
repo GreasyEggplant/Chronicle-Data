@@ -1,13 +1,14 @@
 ﻿using com.greasyeggplant.chronicle.data.csvData;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace com.greasyeggplant.chronicle.data.entities
 {
-    public class Repository
+    public class Repository : Localizer
     {
         /*
         private static string GetFileName(string[] args)
@@ -33,11 +34,15 @@ namespace com.greasyeggplant.chronicle.data.entities
         public bool IsInitialized { get; private set; }
         public List<Card> Cards { get; private set; }
 
+        private CardFactory CardFactory { get; set; }
         private List<CsvCard> CardData { get; set; }
         private List<CsvDescription> Localizations { get; set; }
 
         public Repository()
         {
+            CardFactory = new CardFactory();
+            CardFactory.Localizer = this;
+
             IsInitialized = false;
         }
 
@@ -45,7 +50,6 @@ namespace com.greasyeggplant.chronicle.data.entities
         {
             //TODO: Error Handling
             ReadCsvs();
-
             MapData();
 
             IsInitialized = true;
@@ -62,71 +66,34 @@ namespace com.greasyeggplant.chronicle.data.entities
             Cards = new List<Card>();
             foreach(CsvCard csvCard in CardData)
             {
-                Card c = Map(csvCard);
-                c.Description = GetLocalization("EN", csvCard.DescId);
-                c.EffectDescription = GetLocalization("EN", csvCard.EffectDesc);
-                Cards.Add(c);
+                Card c = CardFactory.CreateCard(csvCard);
+                if (c != null)
+                {
+                    Cards.Add(c);
+                }
             }
         }
         
-        private string GetLocalization(string language, int? descId)
+        public string GetLocalization(Language language, int descId)
         {
-            if(!descId.HasValue)
-            {
-                return null;
-            }
-            CsvDescription localization = Localizations.FirstOrDefault(l => l.Id == descId.Value);
+            CsvDescription localization = Localizations.FirstOrDefault(l => l.Id == descId);
             if(localization == null)
             {
                 //TODO: Raise Warning
                 return null;
             }
-            //TODO: Multiple Languages
             switch (language)
             {
+                case Language.French:
+                    return localization.Fr;
+                case Language.German:
+                    return localization.De;
+                case Language.Spanish:
+                    return localization.Es;
+                case Language.English:
                 default:
                     return localization.En;
             }
-        }
-
-        private Card Map(CsvCard csvCard)
-        {
-            //TODO: Use some kind of mapping framework
-            return new Card()
-            {
-                Id = csvCard.Id,
-                NameId = csvCard.NameId,
-                Name = csvCard.Name,
-                Archetype = csvCard.Archetype,
-                Type = csvCard.Type,
-                Family = csvCard.Family,
-                Image = csvCard.Image,
-                Attack = csvCard.Attack,
-                Health = csvCard.Health,
-                GoldCost = csvCard.GoldCost,
-                Reward0 = new Reward
-                {
-                    Value0 = csvCard.Reward0Value0,
-                    Value1 = csvCard.Reward0Value1,
-                    Type = csvCard.Reward0Type
-                },
-                Reward1 = new Reward
-                {
-                    Value0 = csvCard.Reward1Value0,
-                    Value1 = csvCard.Reward1Value1,
-                    Type = csvCard.Reward1Type
-                },
-                Reward2 = new Reward
-                {
-                    Value0 = csvCard.Reward2Value0,
-                    Value1 = csvCard.Reward2Value1,
-                    Type = csvCard.Reward2Type
-                },
-                Rarity = csvCard.Rarity,
-                Source = csvCard.Source,
-                Artist = csvCard.Artist,
-                HitSplat = csvCard.HitSplat
-            };
         }
 
         private List<T> GetList<T>(string filename)

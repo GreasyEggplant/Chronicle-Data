@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace com.greasyeggplant.chronicle.data.entities
 {
-    public class Card
+    public abstract class Card
     {
         public int Id { get; set; }
         public int NameId { get; set; }
         public string Name { get; set; }
-        public int Archetype { get; set; }
-        public int Type { get; set; }
+        public LegendType Archetype { get; set; }
+        public abstract CardType Type { get; }
         public int? Family { get; set; }
         public string Image { get; set; }
-        public int? Attack { get; set; }
-        public int? Health { get; set; }
-        public int? GoldCost { get; set; }
         public Reward Reward0 { get; set; }
         public Reward Reward1 { get; set; }
         public Reward Reward2 { get; set; }
