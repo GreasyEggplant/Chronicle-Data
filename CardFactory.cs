@@ -1,5 +1,6 @@
 ﻿using System;
 using com.greasyeggplant.chronicle.data.csvData;
+using com.greasyeggplant.chronicle.data.entities.enums;
 
 namespace com.greasyeggplant.chronicle.data.entities
 {
@@ -42,13 +43,13 @@ namespace com.greasyeggplant.chronicle.data.entities
             c.Family = (Family) csvCard.Family.GetValueOrDefault(-1);
             c.Image = csvCard.Image;
             c.Rarity = (Rarity)csvCard.Rarity;
-            c.Source = csvCard.Source;
+            c.Source = (SourceType)csvCard.Source;
             c.Artist = csvCard.Artist;
             c.HitSplat = csvCard.HitSplat;
 
-            c.Name = GetLocalization(Language.English, csvCard.NameId);
-            c.Description = GetLocalization(Language.English, csvCard.DescId);
-            c.EffectDescription = GetLocalization(Language.English, csvCard.EffectDesc);
+            c.Name = GetLocalization(csvCard.NameId);
+            c.Description = GetLocalization(csvCard.DescId);
+            c.EffectDescription = GetLocalization(csvCard.EffectDesc);
 
             c.Reward0 = CreateReward(csvCard.Reward0Type, csvCard.Reward0Value0, csvCard.Reward0Value1);
             c.Reward1 = CreateReward(csvCard.Reward1Type, csvCard.Reward1Value0, csvCard.Reward1Value1);
@@ -75,13 +76,13 @@ namespace com.greasyeggplant.chronicle.data.entities
             }
         }
 
-        private string GetLocalization(Language language, int? descId)
+        private LocalizedString GetLocalization(int? descId)
         {
             if (!descId.HasValue)
             {
                 return null;
             }
-            return Localizer.GetLocalization(language, descId.Value);
+            return Localizer.GetLocalization(descId.Value);
         }
     }
 }

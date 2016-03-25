@@ -73,7 +73,7 @@ namespace com.greasyeggplant.chronicle.data.entities
             }
         }
         
-        public string GetLocalization(Language language, int descId)
+        public LocalizedString GetLocalization(int descId)
         {
             CsvDescription localization = Localizations.FirstOrDefault(l => l.Id == descId);
             if(localization == null)
@@ -81,18 +81,17 @@ namespace com.greasyeggplant.chronicle.data.entities
                 //TODO: Raise Warning
                 return null;
             }
-            switch (language)
+            return new LocalizedString
             {
-                case Language.French:
-                    return localization.Fr;
-                case Language.German:
-                    return localization.De;
-                case Language.Spanish:
-                    return localization.Es;
-                case Language.English:
-                default:
-                    return localization.En;
-            }
+                Id = descId,
+                Text = new Dictionary<Language, string>
+                {
+                    { Language.English, localization.En },
+                    { Language.French, localization.Fr },
+                    { Language.German, localization.De },
+                    { Language.Spanish, localization.Es },
+                }
+            };
         }
 
         private List<T> GetList<T>(string filename)

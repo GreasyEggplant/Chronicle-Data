@@ -2,6 +2,6 @@
 {
     public interface Localizer
     {
-        string GetLocalization(Language language, int descId);
+        LocalizedString GetLocalization(int descId);
     }
 }

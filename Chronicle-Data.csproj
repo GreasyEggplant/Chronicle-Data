@@ -46,15 +46,20 @@
   <ItemGroup>
     <Compile Include="csvData\CsvCard.cs" />
     <Compile Include="csvData\CsvDescription.cs" />
-    <Compile Include="entities\CardFactory.cs" />
-    <Compile Include="entities\Language.cs" />
-    <Compile Include="entities\Localizer.cs" />
+    <Compile Include="CardFactory.cs" />
+    <Compile Include="entities\enums\Family.cs" />
+    <Compile Include="entities\enums\Language.cs" />
+    <Compile Include="entities\enums\Rarity.cs" />
+    <Compile Include="entities\enums\RewardType.cs" />
+    <Compile Include="entities\enums\SourceType.cs" />
+    <Compile Include="entities\LocalizedString.cs" />
+    <Compile Include="Localizer.cs" />
     <Compile Include="entities\SupportCard.cs" />
     <Compile Include="entities\CombatCard.cs" />
     <Compile Include="entities\Card.cs" />
-    <Compile Include="entities\CardType.cs" />
-    <Compile Include="entities\LegendType.cs" />
-    <Compile Include="entities\Repository.cs" />
+    <Compile Include="entities\enums\CardType.cs" />
+    <Compile Include="entities\enums\LegendType.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="entities\Reward.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
