@@ -1,4 +1,5 @@
-﻿using com.greasyeggplant.chronicle.data.csvData;
+﻿using System;
+using com.greasyeggplant.chronicle.data.csvData;
 
 namespace com.greasyeggplant.chronicle.data.entities
 {
@@ -37,38 +38,41 @@ namespace com.greasyeggplant.chronicle.data.entities
         {
             //TODO: Use some kind of mapping framework
             c.Id = csvCard.Id;
-            c.NameId = csvCard.NameId;
-            c.Name = csvCard.Name;
             c.Archetype = (LegendType)csvCard.Archetype;
-            c.Family = csvCard.Family;
+            c.Family = (Family) csvCard.Family.GetValueOrDefault(-1);
             c.Image = csvCard.Image;
-            c.Reward0 = new Reward
-            {
-                Value0 = csvCard.Reward0Value0,
-                Value1 = csvCard.Reward0Value1,
-                Type = csvCard.Reward0Type
-            };
-            c.Reward1 = new Reward
-            {
-                Value0 = csvCard.Reward1Value0,
-                Value1 = csvCard.Reward1Value1,
-                Type = csvCard.Reward1Type
-            };
-            c.Reward2 = new Reward
-            {
-                Value0 = csvCard.Reward2Value0,
-                Value1 = csvCard.Reward2Value1,
-                Type = csvCard.Reward2Type
-            };
-            c.Rarity = csvCard.Rarity;
+            c.Rarity = (Rarity)csvCard.Rarity;
             c.Source = csvCard.Source;
             c.Artist = csvCard.Artist;
             c.HitSplat = csvCard.HitSplat;
 
+            c.Name = GetLocalization(Language.English, csvCard.NameId);
             c.Description = GetLocalization(Language.English, csvCard.DescId);
             c.EffectDescription = GetLocalization(Language.English, csvCard.EffectDesc);
 
+            c.Reward0 = CreateReward(csvCard.Reward0Type, csvCard.Reward0Value0, csvCard.Reward0Value1);
+            c.Reward1 = CreateReward(csvCard.Reward1Type, csvCard.Reward1Value0, csvCard.Reward1Value1);
+            c.Reward2 = CreateReward(csvCard.Reward2Type, csvCard.Reward2Value0, csvCard.Reward2Value1);
+
             return c;
+        }
+
+        private Reward CreateReward(int type, int? value0, int? value1)
+        {
+            RewardType rewardType = (RewardType)type;
+            switch (rewardType)
+            {
+                case RewardType.Armor:
+                case RewardType.Health:
+                case RewardType.Gold:
+                case RewardType.Attack:
+                    return new Reward { Type = rewardType, Value0 = value0.Value + 1 };
+                case RewardType.Weapon:
+                    return new Reward { Type = rewardType, Value0 = value0.Value + 1, Value1 = value1.Value + 1 };
+                case RewardType.None:
+                default:
+                    return null;
+            }
         }
 
         private string GetLocalization(Language language, int? descId)
