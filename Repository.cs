@@ -1,6 +1,7 @@
 ﻿using com.greasyeggplant.chronicle.data.csvData;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,14 +10,7 @@ namespace com.greasyeggplant.chronicle.data.entities
 {
     public class Repository : Localizer
     {
-        /*
-        private static string GetFileName(string[] args)
-        {
-            string localdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            //return "<localdata>/Jagex Ltd/Chronicle - RuneScape Legends/Chronicle-log-2016-03-24-22-32-48.log";
-        }
-        */
-        public static readonly string GameFolder = "C:/Program Files (x86)/Jagex/Chronicle";
+        public static readonly string GameFolder = "Jagex/Chronicle";
         public static readonly string DataFolder = "Game/Chronicle_Data/Config/CSV";
         
         public static readonly string CardsFileName = "cards.csv";
@@ -96,7 +90,7 @@ namespace com.greasyeggplant.chronicle.data.entities
 
         private List<T> GetList<T>(string filename)
         {
-            string filepath = Path.Combine(GameFolder, DataFolder, filename);
+            string filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), GameFolder, DataFolder, filename);
             using (FileStream fileStream = File.OpenRead(filepath))
             using (StreamReader streamReader = new StreamReader(fileStream))
             using (CsvReader reader = new CsvReader(streamReader, ReaderConfiguration))
